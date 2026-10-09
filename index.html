@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kho Apple ID VIP</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0f172a; color: #f8fafc; padding: 15px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 12px; }
+    
+    .header { background: #1e293b; border: 1px solid #334155; padding: 12px 16px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .title { font-size: 16px; font-weight: bold; color: #fff; }
+    .subtitle { font-size: 11px; color: #94a3b8; }
+    .btn-admin { background: #334155; color: #cbd5e1; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; }
+    
+    .alert { background: #450a0a; border: 1px solid #991b1b; padding: 10px 12px; border-radius: 12px; font-size: 11px; color: #fecaca; line-height: 1.4; }
+    .alert-title { font-weight: bold; color: #f87171; margin-bottom: 2px; }
+    
+    .admin-bar { background: #0c4a6e; border: 1px solid #0369a1; padding: 8px 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #bae6fd; }
+    .btn-add { background: #0284c7; color: #fff; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .card-top { display: flex; justify-content: space-between; align-items: center; }
+    .game-title { font-size: 14px; font-weight: bold; color: #38bdf8; }
+    .badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+    .badge-active { background: #064e3b; color: #34d399; border: 1px solid #059669; }
+    .badge-locked { background: #450a0a; color: #f87171; border: 1px solid #dc2626; }
+
+    .row { background: #0f172a; padding: 8px 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1e293b; }
+    .label { font-size: 11px; color: #94a3b8; }
+    .value { font-size: 12px; color: #f1f5f9; font-weight: 500; }
+    .btn-copy { background: #2563eb; color: #fff; border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
+
+    .action-bar { display: flex; gap: 10px; justify-content: flex-end; padding-top: 4px; font-size: 11px; border-top: 1px solid #334155; }
+    .btn-edit { color: #38bdf8; background: none; border: none; cursor: pointer; }
+    .btn-del { color: #f87171; background: none; border: none; cursor: pointer; }
+
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; padding: 15px; }
+    .modal-box { background: #1e293b; border: 1px solid #475569; width: 100%; max-width: 320px; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .modal-box input, .modal-box select { width: 100%; background: #0f172a; border: 1px solid #334155; padding: 8px; border-radius: 6px; color: #fff; font-size: 12px; margin-top: 2px; }
+    .modal-btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title"> Apple ID VIP DONG ID </div>
+        <div class="subtitle">Cho thuê & Chia sẻ Game iOS</div>
+      </div>
+      <button class="btn-admin" id="admin-btn" onclick="toggleAdmin()">🔑 Quản lý</button>
+    </div>
+
+       <div id="admin-panel" class="admin-bar hidden">
+      <span>Đã bật chế độ Quản trị</span>
+      <button class="btn-add" onclick="openModal()">+ Thêm ID</button>
+    </div>
+
+    <div id="account-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+
+  <!-- Modal Form -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <h4 id="modal-title" style="color:#fff; font-size:14px;">Thêm Tài Khoản</h4>
+      <input type="hidden" id="edit-id">
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">Tên Game</label>
+        <input type="text" id="input-game" placeholder="VD: Minecraft PE">
+      </div>
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">Tài khoản Email</label>
+        <input type="text" id="input-email" placeholder="VD: mc.appstore@gmail.com">
+      </div>
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">Mật khẩu</label>
+        <input type="text" id="input-pass" placeholder="VD: Pass2026@#">
+      </div>
+      <div>
+        <label style="font-size:10px; color:#94a3b8;">Trạng thái</label>
+        <select id="input-status">
+          <option value="active">Hoạt động (Live)</option>
+          <option value="locked">Bị khóa (Locked)</option>
+        </select>
+      </div>
+      <div class="modal-btns">
+        <button onclick="closeModal()" style="background:#475569; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px;">Hủy</button>
+        <button onclick="saveAccount()" style="background:#0284c7; color:#fff; border:none; padding:6px 12px; border-radius:6px; font-size:11px; font-weight:bold;">Lưu lại</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASS = "123456";
+    let isAdmin = false;
+
+    const defaultData = [
+      { id: 1, game: "Minecraft PE Full DLC", email: "mc.appstore2026@gmail.com", pass: "McVIP2026@Pass", status: "active" },
+      { id: 2, game: "Shadowrocket", email: "sr.nodes2026@gmail.com", pass: "ShadowVIP2026", status: "active" },
+      { id: 3, game: "GTA: San Andreas", email: "gta.ios2026@gmail.com", pass: "SanAndreas99#", status: "active" }
+    ];
+
+    function getAccounts() {
+      const saved = localStorage.getItem('apple_accounts_v4');
+      return saved ? JSON.parse(saved) : defaultData;
+    }
+
+    function saveAccounts(data) {
+      localStorage.setItem('apple_accounts_v4', JSON.stringify(data));
+      render();
+    }
+
+    function render() {
+      const accounts = getAccounts();
+      const listEl = document.getElementById('account-list');
+      listEl.innerHTML = '';
+
+      accounts.forEach(acc => {
+        const isActive = acc.status === 'active';
+        const card = document.createElement('div');
+        card.className = "card";
+        
+        card.innerHTML = `
+          <div class="card-top">
+            <span class="game-title">🎮 ${acc.game}</span>
+            <span class="badge ${isActive ? 'badge-active' : 'badge-locked'}">
+              ${isActive ? 'Hoạt động' : 'Bị khóa'}
+            </span>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="label">Tài khoản (Email)</div>
+              <div class="value" id="email-${acc.id}">${acc.email}</div>
+            </div>
+            <button class="btn-copy" onclick="copyTextDirect('${acc.email}', this)">Sao chép</button>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="label">Mật khẩu</div>
+              <div class="value" style="letter-spacing: 2px;">••••••••••••</div>
+            </div>
+            <button class="btn-copy" style="background:#475569;" onclick="copyTextDirect('${acc.pass}', this)">Sao chép</button>
+          </div>
+
+          ${isAdmin ? `
+            <div class="action-bar">
+              <button class="btn-edit" onclick="openModal(${acc.id})">✏️ Sửa (Pass: ${acc.pass})</button>
+              <button class="btn-del" onclick="deleteAccount(${acc.id})">🗑️ Xóa</button>
+            </div>
+          ` : ''}
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function copyTextDirect(textToCopy, btn) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const oldText = btn.innerText;
+        btn.innerText = 'Đã chép!';
+        setTimeout(() => { btn.innerText = oldText; }, 1200);
+      });
+    }
+
+    function toggleAdmin() {
+      if (isAdmin) {
+        isAdmin = false;
+        document.getElementById('admin-btn').innerText = "🔑 Quản lý";
+        document.getElementById('admin-panel').classList.add('hidden');
+        render();
+      } else {
+        const pass = prompt("Nhập mật khẩu Quản lý (Mặc định: 123456):");
+        if (pass === ADMIN_PASS) {
+          isAdmin = true;
+          document.getElementById('admin-btn').innerText = "Đăng xuất";
+          document.getElementById('admin-panel').classList.remove('hidden');
+          render();
+        } else if (pass !== null) {
+          alert("Sai mật khẩu!");
+        }
+      }
+    }
+
+    function openModal(id = null) {
+      document.getElementById('modal').classList.remove('hidden');
+      if (id) {
+        const acc = getAccounts().find(a => a.id === id);
+        document.getElementById('modal-title').innerText = "Sửa Tài Khoản";
+        document.getElementById('edit-id').value = acc.id;
+        document.getElementById('input-game').value = acc.game;
+        document.getElementById('input-email').value = acc.email;
+        document.getElementById('input-pass').value = acc.pass;
+        document.getElementById('input-status').value = acc.status;
+      } else {
+        document.getElementById('modal-title').innerText = "Thêm Tài Khoản Mới";
+        document.getElementById('edit-id').value = "";
+        document.getElementById('input-game').value = "";
+        document.getElementById('input-email').value = "";
+        document.getElementById('input-pass').value = "";
+        document.getElementById('input-status').value = "active";
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    function saveAccount() {
+      const id = document.getElementById('edit-id').value;
+      const game = document.getElementById('input-game').value;
+      const email = document.getElementById('input-email').value;
+      const pass = document.getElementById('input-pass').value;
+      const status = document.getElementById('input-status').value;
+
+      if (!game || !email || !pass) {
+        alert("Vui lòng điền đầy đủ thông tin!");
+        return;
+      }
+
+      let accounts = getAccounts();
+      if (id) {
+        accounts = accounts.map(a => a.id == id ? { id: Number(id), game, email, pass, status } : a);
+      } else {
+        accounts.push({ id: Date.now(), game, email, pass, status });
+      }
+
+      saveAccounts(accounts);
+      closeModal();
+    }
+
+    function deleteAccount(id) {
+      if (confirm("Xóa tài khoản này?")) {
+        let accounts = getAccounts();
+        accounts = accounts.filter(a => a.id !== id);
+        saveAccounts(accounts);
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
